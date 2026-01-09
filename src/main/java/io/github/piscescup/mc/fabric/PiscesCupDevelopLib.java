@@ -1,0 +1,25 @@
+package io.github.piscescup.mc.fabric;
+
+import net.fabricmc.api.ModInitializer;
+
+import static io.github.piscescup.mc.fabric.References.*;
+
+
+public class PiscesCupDevelopLib implements ModInitializer {
+
+
+	@Override
+	public void onInitialize() {
+		// This code runs as soon as Minecraft is in a mod-load-ready state.
+		// However, some things (like resources) may still be uninitialized.
+		// Proceed with mild caution.
+
+		MOD_LOGGER.info("Hello Fabric world!");
+        MOD_LOGGER.info(
+            "Hello {} (version: {}), based on Minecraft {}",
+            MOD_NAME, MOD_VERSION, MC_VERSION
+        );
+        MOD_LOGGER.info(MOD_BANNER);
+
+	}
+}
