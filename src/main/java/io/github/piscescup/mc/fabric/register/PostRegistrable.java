@@ -2,7 +2,7 @@ package io.github.piscescup.mc.fabric.register;
 
 import io.github.piscescup.mc.fabric.datagen.lang.LanguageDataGenProvider;
 import io.github.piscescup.mc.fabric.datagen.lang.Translation;
-import io.github.piscescup.mc.fabric.utils.MCLanguage;
+import io.github.piscescup.mc.fabric.utils.constant.MCLanguage;
 import net.minecraft.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 

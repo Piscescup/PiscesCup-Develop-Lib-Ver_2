@@ -1,4 +1,4 @@
-package io.github.piscescup.mc.fabric.utils;
+package io.github.piscescup.mc.fabric.utils.constant;
 
 import java.util.Arrays;
 

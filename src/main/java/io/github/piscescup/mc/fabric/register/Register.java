@@ -1,5 +1,6 @@
 package io.github.piscescup.mc.fabric.register;
 
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import org.jspecify.annotations.NonNull;
@@ -35,8 +36,9 @@ class Register<T, POST extends PostRegistrable<T, POST, R>, R extends Register<T
 
     protected Register() {}
 
-    protected Register(Identifier id) {
+    protected Register(RegistryKey<? extends Registry<T>> registry , Identifier id) {
         this.id = id;
+        this.registryKey = RegistryKey.of(registry, id);
     }
 
     @Override

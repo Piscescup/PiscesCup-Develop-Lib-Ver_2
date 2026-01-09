@@ -5,16 +5,16 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
- * <h2>Description</h2>
- *
- * <h2>Usages</h2>
  *
  * @author REN YuanTong
  * @Date 2026-01-04
@@ -23,23 +23,7 @@ import java.util.function.Supplier;
 public interface ItemGroupPreRegistrable
 {
     interface PositionStage {
-        DisplayNameStage position(ItemGroup.Row row, int column);
-    }
-
-    interface DisplayNameStage {
-        IconStage displayName(Supplier<Text> displayNameSupplier);
-
-        default IconStage displayName(String displayName) {
-            return this.displayName( () -> Text.literal(displayName) );
-        }
-
-        default IconStage displayName(Text displayName) {
-            return this.displayName( () -> displayName );
-        }
-
-        default IconStage emptyDisplayName() {
-            return this.displayName(Text::empty);
-        }
+        IconStage position(ItemGroup.Row row, int column);
     }
 
     interface IconStage {
@@ -63,40 +47,67 @@ public interface ItemGroupPreRegistrable
     }
 
     interface AppearanceStage {
-        ItemGroupEntryCollectable appearance(
+        TextureStage appearance(
             boolean scrollbar,
             boolean renderName,
-            boolean special,
-            ItemGroup.Type type
+            boolean special
         );
+
+        default TextureStage defaultAppearance() {
+            return this.appearance(true, true, false);
+        }
     }
 
-    interface ItemGroupEntryCollectable
+    interface TextureStage {
+        Identifier ITEMS = getTabTextureId("items");
+
+        EntryCollectStage texture(Identifier texture);
+
+        default EntryCollectStage defaultTexture() {
+            return this.texture(ITEMS);
+        }
+
+        static Identifier getTabTextureId(String name) {
+            return Identifier.ofVanilla("textures/gui/container/creative_inventory/tab_" + name + ".png");
+        }
+    }
+
+    interface EntryCollectStage
         extends PreRegistrable<ItemGroupPostRegistrable>
     {
-        ItemGroupEntryCollectable entry(ItemStack stack, ItemGroup.StackVisibility visibility);
+        EntryCollectStage entry(ItemStack stack, ItemGroup.StackVisibility visibility);
 
-        default ItemGroupEntryCollectable entry(ItemConvertible item) {
+        default EntryCollectStage entry(ItemConvertible item) {
             return this.entry(new ItemStack(item), ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
         }
 
-        default ItemGroupEntryCollectable entry(ItemStack itemStack) {
+        default EntryCollectStage entry(ItemStack itemStack) {
             return this.entry(itemStack, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
         }
 
-        ItemGroupEntryCollectable entries(Collection<? extends ItemConvertible> items, ItemGroup.StackVisibility visibility);
+        EntryCollectStage stackEntries(Collection<ItemStack> stacks, ItemGroup.StackVisibility visibility);
 
-        default ItemGroupEntryCollectable entries(Collection<? extends ItemConvertible> items) {
-            return this.entries(items, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
+        default EntryCollectStage itemEntries(Collection<ItemConvertible> items, ItemGroup.StackVisibility visibility) {
+            Objects.requireNonNull(items);
+            List<ItemStack> stacks = items.stream()
+                .filter(Objects::nonNull)
+                .map(ItemStack::new)
+                .toList();
+            return this.stackEntries(stacks, visibility);
         }
 
-        ItemGroupEntryCollectable collectBy(ItemGroup.EntryCollector collector);
 
-        default ItemGroupEntryCollectable collectByContext(Consumer<ItemGroup.DisplayContext> action) {
-            return this.collectBy(
-                (displayContext, entries) -> action.accept(displayContext)
-            );
+        default EntryCollectStage itemEntries(Collection<ItemConvertible> items) {
+            return this.itemEntries(items, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
         }
+
+        default EntryCollectStage stackEntries(Collection<ItemStack> stacks) {
+            return this.stackEntries(stacks, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
+        }
+
+        EntryCollectStage collectBy(ItemGroup.EntryCollector collector);
+
+        EntryCollectStage collectByContext(Consumer<ItemGroup.DisplayContext> action);
 
     }
 }

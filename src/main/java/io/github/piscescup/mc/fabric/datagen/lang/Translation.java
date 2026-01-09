@@ -1,6 +1,6 @@
 package io.github.piscescup.mc.fabric.datagen.lang;
 
-import io.github.piscescup.mc.fabric.utils.MCLanguage;
+import io.github.piscescup.mc.fabric.utils.constant.MCLanguage;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
@@ -13,11 +13,9 @@ import net.minecraft.text.TextContent;
 import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Identifier;
 import net.minecraft.village.VillagerProfession;
-import org.eclipse.collections.impl.list.mutable.FastList;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;

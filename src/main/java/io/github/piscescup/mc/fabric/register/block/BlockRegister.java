@@ -28,8 +28,7 @@ public class BlockRegister
 
 
     private BlockRegister(@NotNull Identifier id) {
-        super(id);
-
+        super(RegistryKeys.BLOCK, id);
     }
 
     public static BlockPreRegistrable createFor(@NotNull Identifier id) {
@@ -59,11 +58,6 @@ public class BlockRegister
 
     @Override
     public BlockPostRegistrable register() {
-        this.registryKey = RegistryKey.of(
-            RegistryKeys.BLOCK,
-            this.id
-        );
-
         Block block = this.factory.apply(
             this.settings.registryKey(this.registryKey)
         );
