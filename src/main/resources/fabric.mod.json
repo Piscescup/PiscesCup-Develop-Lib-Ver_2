@@ -3,7 +3,7 @@
 	"id": "pc-dev-lib",
 	"version": "${version}",
 	"name": "PC Develop Lib",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "A library for Minecraft Fabric mod development.",
 	"authors": [
 		"REN Yuantong"
 	],
@@ -11,7 +11,7 @@
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
-	"license": "CC0-1.0",
+	"license": "Apache-2.0",
 	"icon": "assets/pc-dev-lib/icon.png",
 	"environment": "*",
 	"entrypoints": {
