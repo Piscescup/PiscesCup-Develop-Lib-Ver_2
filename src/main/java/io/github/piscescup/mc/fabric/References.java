@@ -9,29 +9,28 @@ import org.apache.logging.log4j.Logger;
  * <h2>Usages</h2>
  *
  * @author REN YuanTong
- * @Date 2025-12-17
- * @since 1.0.0
+ * @Date 2025-11-17
+ * @since
  */
 public final class References {
-    public static final String MOD_NAME = "PiscesCup Develop Lib";
-
+    public static final String MOD_ID = "pc-dev-lib";
+    public static final String MOD_NAME = "PC Develop Lib";
     public static final String MOD_VERSION = "1.0.0";
-
-    public static final String MC_VERSION = "1.21.11";
-
-    public static final String MOD_ID = "pc-develop-lib";
+    public static final String MC_VERSION = "1.21.10";
 
     public static final Logger MOD_LOGGER = LogManager.getLogger(MOD_NAME);
 
-    public static final String MOD_BANNER = """
+    public static final String MOD_FLAG = """
         \n
-          _____ _                    _____              _____                 _               _      _ _    \s
-         |  __ (_)                  / ____|            |  __ \\               | |             | |    (_) |   \s
-         | |__) | ___  ___ ___  ___| |    _   _ _ __   | |  | | _____   _____| | ___  _ __   | |     _| |__ \s
-         |  ___/ / __|/ __/ _ \\/ __| |   | | | | '_ \\  | |  | |/ _ \\ \\ / / _ \\ |/ _ \\| '_ \\  | |    | | '_ \\\s
-         | |   | \\__ \\ (_|  __/\\__ \\ |___| |_| | |_) | | |__| |  __/\\ V /  __/ | (_) | |_) | | |____| | |_) |
-         |_|   |_|___/\\___\\___||___/\\_____\\__,_| .__/  |_____/ \\___| \\_/ \\___|_|\\___/| .__/  |______|_|_.__/\s
-                                               | |                                   | |                    \s
-                                               |_|                                   |_|                    \s
+        ___________________   ________                     .__                  .____    ._____.   \s
+        \\______   \\_   ___ \\  \\______ \\   _______  __ ____ |  |   ____ ______   |    |   |__\\_ |__ \s
+         |     ___/    \\  \\/   |    |  \\_/ __ \\  \\/ // __ \\|  |  /  _ \\\\____ \\  |    |   |  || __ \\\s
+         |    |   \\     \\____  |    `   \\  ___/\\   /\\  ___/|  |_(  <_> )  |_> > |    |___|  || \\_\\ \\
+         |____|    \\______  / /_______  /\\___  >\\_/  \\___  >____/\\____/|   __/  |_______ \\__||___  /
+                          \\/          \\/     \\/          \\/            |__|             \\/       \\/\s
         """;
+
+    public static final String THANKS = "Thank for you using the lib: " + MOD_NAME;
+
+    public static final String MOD_FINISH = "The lib has been initialized.";
 }

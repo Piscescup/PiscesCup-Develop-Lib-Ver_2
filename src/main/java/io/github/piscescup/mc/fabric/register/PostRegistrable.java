@@ -1,10 +1,12 @@
 package io.github.piscescup.mc.fabric.register;
 
-import io.github.piscescup.mc.fabric.datagen.lang.LanguageDataGenProvider;
+import io.github.piscescup.mc.fabric.datagen.lang.LanguageGenProvider;
 import io.github.piscescup.mc.fabric.datagen.lang.Translation;
-import io.github.piscescup.mc.fabric.utils.constant.MCLanguage;
+import io.github.piscescup.mc.fabric.util.MCLanguage;
 import net.minecraft.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 
 /**
  * Represents a registrable object that supports subsequent configuration and
@@ -44,12 +46,18 @@ public interface PostRegistrable<
      * @param value The localized string value for the target language
      * @return the Fluent {@link PostRegistrable} instance for chaining (typically {@code this})
      * @see MCLanguage
-     * @see LanguageDataGenProvider
+     * @see LanguageGenProvider
      * @throws NullPointerException if {@code lang} or {@code value} is null
      */
     @SuppressWarnings("unchecked")
     default POST translate(@NotNull MCLanguage lang, @NotNull String value) {
-        Translation.putTranslation(lang, this.get(), value);
+        Translation.putTranslation(this.get(), lang, value);
+        return (POST) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    default POST collectsTo(Collection<T> collection) {
+        collection.add(this.get());
         return (POST) this;
     }
 
@@ -89,5 +97,7 @@ public interface PostRegistrable<
      * @see Register
      */
     @NotNull R getRegister();
+
+
 
 }

@@ -1,23 +1,22 @@
 package io.github.piscescup.mc.fabric.register.itemgroup;
 
 import io.github.piscescup.mc.fabric.register.PreRegistrable;
+import io.github.piscescup.mc.fabric.util.CheckUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  *
  * @author REN YuanTong
- * @Date 2026-01-04
  * @since 1.0.0
  */
 public interface ItemGroupPreRegistrable
@@ -27,47 +26,51 @@ public interface ItemGroupPreRegistrable
     }
 
     interface IconStage {
-        AppearanceStage icon(Supplier<ItemStack> iconSupplier);
+        AppearanceStage icon(@NotNull Supplier<ItemStack> iconSupplier);
 
-        default AppearanceStage icon(ItemConvertible item) {
+        default AppearanceStage icon(@NotNull ItemConvertible item) {
+            CheckUtil.NullCheck.requireNotNull(item);
             return this.icon( () -> new ItemStack(item));
         }
 
-        default AppearanceStage icon(ItemStack icon) {
-            return this.icon( () -> icon );
+        default AppearanceStage icon(@NotNull ItemStack icon) {
+            CheckUtil.NullCheck.requireNotNull(icon);
+            return this.icon( () -> icon.copy() );
         }
 
-        default AppearanceStage icon(Item item) {
+        default AppearanceStage icon(@NotNull Item item) {
+            CheckUtil.NullCheck.requireNotNull(item);
             return this.icon( () -> new ItemStack(item));
         }
 
         default AppearanceStage emptyIcon() {
             return this.icon( () -> ItemStack.EMPTY );
         }
+
     }
 
     interface AppearanceStage {
-        TextureStage appearance(
-            boolean scrollbar,
-            boolean renderName,
-            boolean special
-        );
+        TextureStage appearance(boolean scrollbar, boolean renderDisplayName, boolean specialItemGroup);
 
         default TextureStage defaultAppearance() {
             return this.appearance(true, true, false);
         }
+
+        default TextureStage specialAppearance() {
+            return this.appearance(true, true, true);
+        }
     }
 
     interface TextureStage {
-        Identifier ITEMS = getTabTextureId("items");
+        static final Identifier ITEMS = getVanillaTabTextureId("items");
 
-        EntryCollectStage texture(Identifier texture);
+        EntryCollectStage texture(@NotNull Identifier texture);
 
         default EntryCollectStage defaultTexture() {
             return this.texture(ITEMS);
         }
 
-        static Identifier getTabTextureId(String name) {
+        static Identifier getVanillaTabTextureId(@NotNull String name) {
             return Identifier.ofVanilla("textures/gui/container/creative_inventory/tab_" + name + ".png");
         }
     }
@@ -75,39 +78,64 @@ public interface ItemGroupPreRegistrable
     interface EntryCollectStage
         extends PreRegistrable<ItemGroupPostRegistrable>
     {
-        EntryCollectStage entry(ItemStack stack, ItemGroup.StackVisibility visibility);
+        EntryCollectStage addEntry(@NotNull ItemStack stack, ItemGroup.StackVisibility visibility);
 
-        default EntryCollectStage entry(ItemConvertible item) {
-            return this.entry(new ItemStack(item), ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
+        default EntryCollectStage addEntry(@NotNull ItemStack item) {
+            CheckUtil.NullCheck.requireNotNull(item);
+            return this.addEntry(item, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
         }
 
-        default EntryCollectStage entry(ItemStack itemStack) {
-            return this.entry(itemStack, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
+        default EntryCollectStage addEntry(@NotNull ItemConvertible item, ItemGroup.StackVisibility visibility) {
+            CheckUtil.NullCheck.requireNotNull(item);
+            return this.addEntry(new ItemStack(item), visibility);
         }
 
-        EntryCollectStage stackEntries(Collection<ItemStack> stacks, ItemGroup.StackVisibility visibility);
+        default EntryCollectStage addEntry(@NotNull ItemConvertible item) {
+            CheckUtil.NullCheck.requireNotNull(item);
+            return this.addEntry(item, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
+        }
 
-        default EntryCollectStage itemEntries(Collection<ItemConvertible> items, ItemGroup.StackVisibility visibility) {
-            Objects.requireNonNull(items);
+        EntryCollectStage addStackEntries(@NotNull Collection<@NotNull ItemStack> items, ItemGroup.StackVisibility visibility);
+
+        default EntryCollectStage addStackEntries(@NotNull Collection<@NotNull ItemStack> items) {
+            CheckUtil.NullCheck.requireAllNotNull(items);
+            return this.addStackEntries(items, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
+        }
+
+        default EntryCollectStage addItemConvertibleEntries(@NotNull Collection<@NotNull ItemConvertible> items, ItemGroup.StackVisibility visibility) {
+            CheckUtil.NullCheck.requireAllNotNull(items);
+            CheckUtil.NullCheck.requireNotNull(visibility);
             List<ItemStack> stacks = items.stream()
-                .filter(Objects::nonNull)
+                .filter(CheckUtil.NullCheck::nonNull)
                 .map(ItemStack::new)
                 .toList();
-            return this.stackEntries(stacks, visibility);
+
+            return this.addStackEntries(stacks, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
         }
 
+        default EntryCollectStage addItemConvertibleEntries(@NotNull Collection<@NotNull ItemConvertible> items) {
 
-        default EntryCollectStage itemEntries(Collection<ItemConvertible> items) {
-            return this.itemEntries(items, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
+            return this.addItemConvertibleEntries(items, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
         }
 
-        default EntryCollectStage stackEntries(Collection<ItemStack> stacks) {
-            return this.stackEntries(stacks, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
+        default EntryCollectStage addItemEntries(@NotNull Collection<@NotNull Item> items, ItemGroup.StackVisibility visibility) {
+            CheckUtil.NullCheck.requireAllNotNull(items);
+            CheckUtil.NullCheck.requireNotNull(visibility);
+            List<ItemStack> stacks = items.stream()
+                .filter(CheckUtil.NullCheck::nonNull)
+                .map(ItemStack::new)
+                .toList();
+
+            return this.addStackEntries(stacks, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
         }
 
-        EntryCollectStage collectBy(ItemGroup.EntryCollector collector);
+        default EntryCollectStage addItemEntries(@NotNull Collection<@NotNull Item> items) {
+            return this.addItemEntries(items, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
+        }
 
-        EntryCollectStage collectByContext(Consumer<ItemGroup.DisplayContext> action);
+        EntryCollectStage collectBy(@NotNull ItemGroup.EntryCollector collector);
+
+        EntryCollectStage collectByContext(@NotNull Consumer<ItemGroup.DisplayContext> action);
 
     }
 }

@@ -3,7 +3,7 @@ package io.github.piscescup.mc.fabric.register;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
-import org.jspecify.annotations.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import static io.github.piscescup.mc.fabric.References.MOD_LOGGER;
 
@@ -36,7 +36,7 @@ class Register<T, POST extends PostRegistrable<T, POST, R>, R extends Register<T
 
     protected Register() {}
 
-    protected Register(RegistryKey<? extends Registry<T>> registry , Identifier id) {
+    protected Register(RegistryKey<? extends Registry<T>> registry, Identifier id) {
         this.id = id;
         this.registryKey = RegistryKey.of(registry, id);
     }
@@ -50,7 +50,7 @@ class Register<T, POST extends PostRegistrable<T, POST, R>, R extends Register<T
      * @throws IllegalStateException if the thing to be registered is null
      */
     @Override
-    public @NonNull T get() {
+    public @NotNull T get() {
         if (thing == null) {
             MOD_LOGGER.error(
                 "The thing to be registered is null."
@@ -67,7 +67,7 @@ class Register<T, POST extends PostRegistrable<T, POST, R>, R extends Register<T
      * @throws NullPointerException if the registryKey is null
      */
     @Override
-    public @NonNull RegistryKey<T> getRegistryKey() {
+    public @NotNull RegistryKey<T> getRegistryKey() {
         if (registryKey == null) {
             MOD_LOGGER.error(
                 "The registry key is null."
@@ -85,7 +85,7 @@ class Register<T, POST extends PostRegistrable<T, POST, R>, R extends Register<T
      */
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull R getRegister() {
+    public @NotNull R getRegister() {
         return (R) this;
     }
 }
