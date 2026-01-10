@@ -1,6 +1,6 @@
 package io.github.piscescup.mc.fabric.register.recipe.crafting;
 
-import io.github.piscescup.mc.fabric.util.CheckUtil;
+import io.github.piscescup.mc.fabric.utils.CheckUtils.NullCheck;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.recipe.Ingredient;
@@ -37,12 +37,12 @@ public final class ShapelessCraftingRecipe extends CraftingRecipe<ShapelessCraft
     }
 
     public ShapelessCraftingRecipe input(@NotNull Ingredient ingredient) {
-        CheckUtil.NullCheck.requireNotNull(ingredient);
+        NullCheck.requireNonNull(ingredient);
         return this.input(ingredient, 1);
     }
 
     public ShapelessCraftingRecipe input(@NotNull Ingredient ingredient, int count) {
-        CheckUtil.NullCheck.requireNotNull(ingredient);
+        NullCheck.requireNonNull(ingredient);
         for (int i = 0; i < count; i++) {
             this.ingredients.add(ingredient);
         }
@@ -50,12 +50,12 @@ public final class ShapelessCraftingRecipe extends CraftingRecipe<ShapelessCraft
     }
 
     public ShapelessCraftingRecipe input(@NotNull ItemConvertible ingredient) {
-        CheckUtil.NullCheck.requireNotNull(ingredient);
+        NullCheck.requireNonNull(ingredient);
         return this.input(ingredient, 1);
     }
 
     public ShapelessCraftingRecipe input(@NotNull ItemConvertible item, int count) {
-        CheckUtil.NullCheck.requireNotNull(item);
+        NullCheck.requireNonNull(item);
         for (int i = 0; i < count; i++) {
             this.ingredients.add(Ingredient.ofItem(item));
         }
@@ -63,7 +63,7 @@ public final class ShapelessCraftingRecipe extends CraftingRecipe<ShapelessCraft
     }
 
     public ShapelessCraftingRecipe input(@NotNull TagKey<Item> tag) {
-        CheckUtil.NullCheck.requireNotNull(tag);
+        NullCheck.requireNonNull(tag);
         this.tags.add(tag);
         return this;
     }

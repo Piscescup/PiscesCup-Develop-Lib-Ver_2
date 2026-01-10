@@ -1,7 +1,7 @@
 package io.github.piscescup.mc.fabric.register.item;
 
 import io.github.piscescup.mc.fabric.register.Register;
-import io.github.piscescup.mc.fabric.util.CheckUtil;
+import io.github.piscescup.mc.fabric.utils.CheckUtils.NullCheck;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -56,7 +56,7 @@ public class BlockItemRegister
      */
     @Contract("_ -> new")
     public static @NotNull BlockItemPreRegistrable createFor(@NotNull Block block) {
-        CheckUtil.NullCheck.requireNotNull(block);
+        NullCheck.requireNonNull(block);
         return new BlockItemRegister(block);
     }
 
@@ -71,7 +71,7 @@ public class BlockItemRegister
      */
     @Override
     public BlockItemPreRegistrable setting(Item.@NotNull Settings settings) {
-        CheckUtil.NullCheck.requireNotNull(settings);
+        NullCheck.requireNonNull(settings);
         this.settings = settings;
         return this;
     }
@@ -84,7 +84,7 @@ public class BlockItemRegister
      */
     @Override
     public BlockItemPreRegistrable factory(@NotNull BiFunction<Block, Item.Settings, Item> factory) {
-        CheckUtil.NullCheck.requireNotNull(factory);
+        NullCheck.requireNonNull(factory);
         this.factory = factory;
         return this;
     }

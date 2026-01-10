@@ -31,6 +31,8 @@ bin/
 # fabric
 
 run/
+src/generated/
+src/java/io/github/piscescup/mc/fabric/test
 
 # java
 

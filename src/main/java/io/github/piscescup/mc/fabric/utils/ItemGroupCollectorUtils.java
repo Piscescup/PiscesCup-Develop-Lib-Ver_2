@@ -63,7 +63,7 @@ public final class ItemGroupCollectorUtils {
      * @param contextActions The list of context actions to be scheduled.
      * @return A scheduled entry collector that performs, in sequence, the operations of all
      */
-    public static ItemGroup.EntryCollector scheduleContextCollector(
+    public static ItemGroup.EntryCollector scheduleContextToCollectors(
         Collection<Consumer<ItemGroup.DisplayContext>> contextActions
     ) {
         Objects.requireNonNull(contextActions);

@@ -1,8 +1,8 @@
 package io.github.piscescup.mc.fabric.register.itemgroup;
 
 import io.github.piscescup.mc.fabric.register.Register;
-import io.github.piscescup.mc.fabric.util.CheckUtil;
-import io.github.piscescup.mc.fabric.util.ItemGroupCollectorUtils;
+import io.github.piscescup.mc.fabric.utils.CheckUtils.NullCheck;
+import io.github.piscescup.mc.fabric.utils.ItemGroupCollectorUtils;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -18,7 +18,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static io.github.piscescup.mc.fabric.util.ItemGroupCollectorUtils.EMPTY_ENTRIES;
+import static io.github.piscescup.mc.fabric.utils.ItemGroupCollectorUtils.ENTRY_COLLECTOR;
 
 /**
  *
@@ -43,7 +43,7 @@ public class ItemGroupRegister
     private ItemGroup.Type type = ItemGroup.Type.CATEGORY;
     private Identifier texture;
 
-    private ItemGroup.EntryCollector entryCollector = EMPTY_ENTRIES;
+    private ItemGroup.EntryCollector entryCollector = ENTRY_COLLECTOR;
     private final Map<ItemStack, ItemGroup.StackVisibility> entries;
     private final List<Consumer<ItemGroup.DisplayContext>> entryContextCollectors;
 
@@ -113,7 +113,7 @@ public class ItemGroupRegister
 
     @Override
     public ItemGroupPreRegistrable.AppearanceStage icon(@NotNull Supplier<ItemStack> iconSupplier) {
-        CheckUtil.NullCheck.requireNotNull(iconSupplier);
+        NullCheck.requireNonNull(iconSupplier);
         this.iconSupplier = iconSupplier;
         return this;
     }
@@ -135,21 +135,21 @@ public class ItemGroupRegister
 
     @Override
     public ItemGroupPreRegistrable.EntryCollectStage collectBy(ItemGroup.@NotNull EntryCollector collector) {
-        CheckUtil.NullCheck.requireNotNull(collector);
+        NullCheck.requireNonNull(collector);
         this.entryCollector = ItemGroupCollectorUtils.andThen(this.entryCollector, collector);
         return this;
     }
 
     @Override
     public ItemGroupPreRegistrable.EntryCollectStage collectByContext(@NotNull Consumer<ItemGroup.DisplayContext> action) {
-        CheckUtil.NullCheck.requireNotNull(action);
+        NullCheck.requireNonNull(action);
         this.entryContextCollectors.add(action);
         return this;
     }
 
     @Override
     public ItemGroupPreRegistrable.EntryCollectStage texture(@NotNull Identifier texture) {
-        CheckUtil.NullCheck.requireNotNull(texture);
+        NullCheck.requireNonNull(texture);
         this.texture = texture;
         return this;
     }

@@ -1,6 +1,6 @@
 package io.github.piscescup.mc.fabric.datagen.lang;
 
-import io.github.piscescup.mc.fabric.util.MCLanguage;
+import io.github.piscescup.mc.fabric.utils.constant.MCLanguage;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static io.github.piscescup.mc.fabric.References.MOD_LOGGER;
-import static io.github.piscescup.mc.fabric.util.CheckUtil.NullCheck;
+import static io.github.piscescup.mc.fabric.utils.CheckUtils.NullCheck;
 
 /**
  * A Translation class is a container of all {@link TranslationEntry} for different languages.
@@ -45,8 +45,8 @@ public class Translation {
      * @throws NullPointerException if {@code thing} or {@code translation} is null.
      */
     public static void putTranslation(Object thing, MCLanguage lang, String translation) {
-        NullCheck.requireNotNull(thing, "Thing to be translated must not be null");
-        NullCheck.requireNotNull(translation, "Translation must not be null");
+        NullCheck.requireNonNull(thing, "Thing to be translated must not be null");
+        NullCheck.requireNonNull(translation, "Translation must not be null");
 
         TRANSLATION_MAP
             .computeIfAbsent(lang, mcLang -> new ConcurrentLinkedQueue<>())
@@ -61,8 +61,8 @@ public class Translation {
      * @see MCLanguage
      */
     public static void putTranslation(MCLanguage thing, TranslationEntry entry) {
-        NullCheck.requireNotNull(thing);
-        NullCheck.requireNotNull(entry);
+        NullCheck.requireNonNull(thing);
+        NullCheck.requireNonNull(entry);
 
         TRANSLATION_MAP
             .computeIfAbsent(thing, mcLang -> new ConcurrentLinkedQueue<>())
@@ -77,8 +77,8 @@ public class Translation {
      * @see MCLanguage
      */
     public static void putTranslations(MCLanguage lang, List<TranslationEntry> entries) {
-        NullCheck.requireNotNull(lang);
-        NullCheck.requireAllNotNull(entries);
+        NullCheck.requireNonNull(lang);
+        NullCheck.requireAllNonNull(entries);
 
         TRANSLATION_MAP
             .computeIfAbsent(lang, mcLang -> new ConcurrentLinkedQueue<>())
@@ -93,8 +93,8 @@ public class Translation {
      * @see MCLanguage
      */
     public static void putTranslations(MCLanguage lang, TranslationEntry... entries) {
-        NullCheck.requireNotNull(lang);
-        NullCheck.requireAllNotNull(entries);
+        NullCheck.requireNonNull(lang);
+        NullCheck.requireAllNonNull(entries);
 
         TRANSLATION_MAP
             .computeIfAbsent(lang, mcLang -> new ConcurrentLinkedQueue<>())
@@ -107,7 +107,7 @@ public class Translation {
      * @return All translation entries for the given language.
      */
     public static List<TranslationEntry> getLangTranslations(MCLanguage lang) {
-        NullCheck.requireNotNull(lang);
+        NullCheck.requireNonNull(lang);
         Queue<TranslationEntry> queue = TRANSLATION_MAP.get(lang);
         return queue == null ? Collections.emptyList() : List.copyOf(queue);
     }

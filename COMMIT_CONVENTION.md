@@ -106,7 +106,9 @@ BREAKING CHANGE: API signature changed.
 
 ## 7. Common Templates
 New Feature
+```
 feat(item-group): add context-aware entry collector
+```
 
 Bug Fix
 ```

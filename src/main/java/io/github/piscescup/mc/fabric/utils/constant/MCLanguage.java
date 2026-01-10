@@ -1,5 +1,11 @@
 package io.github.piscescup.mc.fabric.utils.constant;
 
+import io.github.piscescup.mc.fabric.datagen.DataGenOption;
+import io.github.piscescup.mc.fabric.datagen.lang.LanguageDataGenProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.minecraft.data.DataProvider;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 
 /**
@@ -11,7 +17,7 @@ import java.util.Arrays;
  * @Date 2025-12-17
  * @since
  */
-public enum MCLanguage {
+public enum MCLanguage implements DataGenOption {
     /**
      * Afrikaans
      */
@@ -700,4 +706,14 @@ public enum MCLanguage {
             .findFirst()
             .orElse(EN_US);
     }
+
+    @Override
+    public FabricDataGenerator.Pack.@NotNull RegistryDependentFactory<DataProvider> toRegistryDependentFactory() {
+        return (dataOutput, registryLookup) -> new LanguageDataGenProvider(
+            dataOutput,
+            this,
+            registryLookup
+        );
+    }
+
 }

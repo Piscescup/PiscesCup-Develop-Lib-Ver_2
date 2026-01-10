@@ -1,6 +1,6 @@
 package io.github.piscescup.mc.fabric.register.recipe.crafting;
 
-import io.github.piscescup.mc.fabric.util.CheckUtil;
+import io.github.piscescup.mc.fabric.utils.CheckUtils.NullCheck;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.recipe.Ingredient;
@@ -45,37 +45,37 @@ public final class ShapedCraftingRecipe extends CraftingRecipe<ShapedCraftingRec
     }
 
     public ShapedCraftingRecipe pattern(@NotNull String pattern) {
-        CheckUtil.NullCheck.requireNotNull(pattern);
+        NullCheck.requireNonNull(pattern);
         validatePatternOrThrow(pattern);
         this.patterns.add(pattern);
         return this;
     }
 
     public ShapedCraftingRecipe definition(@NotNull Map<Character, Ingredient> definitions) {
-        CheckUtil.NullCheck.requireNotNull(definitions);
-        CheckUtil.NullCheck.requireAllNotNull(definitions.keySet());
-        CheckUtil.NullCheck.requireAllNotNull(definitions.values());
+        NullCheck.requireNonNull(definitions);
+        NullCheck.requireAllNonNull(definitions.keySet());
+        NullCheck.requireAllNonNull(definitions.values());
         this.ingredientDefinitions.putAll(definitions);
         return this;
     }
 
     public ShapedCraftingRecipe definition(@NotNull Character symbol, Ingredient ingredient) {
-        CheckUtil.NullCheck.requireNotNull(symbol);
-        CheckUtil.NullCheck.requireNotNull(ingredient);
+        NullCheck.requireNonNull(symbol);
+        NullCheck.requireNonNull(ingredient);
         this.ingredientDefinitions.put(symbol, ingredient);
         return this;
     }
 
     public ShapedCraftingRecipe definition(@NotNull Character symbol, ItemConvertible item) {
-        CheckUtil.NullCheck.requireNotNull(symbol);
-        CheckUtil.NullCheck.requireNotNull(item);
+        NullCheck.requireNonNull(symbol);
+        NullCheck.requireNonNull(item);
         this.ingredientDefinitions.put(symbol, Ingredient.ofItem(item));
         return this;
     }
 
     public ShapedCraftingRecipe definition(@NotNull Character symbol, TagKey<Item> item) {
-        CheckUtil.NullCheck.requireNotNull(symbol);
-        CheckUtil.NullCheck.requireNotNull(item);
+        NullCheck.requireNonNull(symbol);
+        NullCheck.requireNonNull(item);
         this.tagDefinitions.put(symbol, item);
         return this;
     }

@@ -2,7 +2,7 @@ package io.github.piscescup.mc.fabric.test.item;
 
 import io.github.piscescup.mc.fabric.register.item.ItemRegister;
 import io.github.piscescup.mc.fabric.test.item.custom.TestCustomItem;
-import io.github.piscescup.mc.fabric.util.MCLanguage;
+import io.github.piscescup.mc.fabric.utils.constant.MCLanguage;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 

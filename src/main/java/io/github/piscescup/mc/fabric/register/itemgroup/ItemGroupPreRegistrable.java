@@ -1,7 +1,7 @@
 package io.github.piscescup.mc.fabric.register.itemgroup;
 
 import io.github.piscescup.mc.fabric.register.PreRegistrable;
-import io.github.piscescup.mc.fabric.util.CheckUtil;
+import io.github.piscescup.mc.fabric.utils.CheckUtils.NullCheck;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemGroup;
@@ -29,17 +29,17 @@ public interface ItemGroupPreRegistrable
         AppearanceStage icon(@NotNull Supplier<ItemStack> iconSupplier);
 
         default AppearanceStage icon(@NotNull ItemConvertible item) {
-            CheckUtil.NullCheck.requireNotNull(item);
+            NullCheck.requireNonNull(item);
             return this.icon( () -> new ItemStack(item));
         }
 
         default AppearanceStage icon(@NotNull ItemStack icon) {
-            CheckUtil.NullCheck.requireNotNull(icon);
+            NullCheck.requireNonNull(icon);
             return this.icon( () -> icon.copy() );
         }
 
         default AppearanceStage icon(@NotNull Item item) {
-            CheckUtil.NullCheck.requireNotNull(item);
+            NullCheck.requireNonNull(item);
             return this.icon( () -> new ItemStack(item));
         }
 
@@ -81,32 +81,32 @@ public interface ItemGroupPreRegistrable
         EntryCollectStage addEntry(@NotNull ItemStack stack, ItemGroup.StackVisibility visibility);
 
         default EntryCollectStage addEntry(@NotNull ItemStack item) {
-            CheckUtil.NullCheck.requireNotNull(item);
+            NullCheck.requireNonNull(item);
             return this.addEntry(item, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
         }
 
         default EntryCollectStage addEntry(@NotNull ItemConvertible item, ItemGroup.StackVisibility visibility) {
-            CheckUtil.NullCheck.requireNotNull(item);
+            NullCheck.requireNonNull(item);
             return this.addEntry(new ItemStack(item), visibility);
         }
 
         default EntryCollectStage addEntry(@NotNull ItemConvertible item) {
-            CheckUtil.NullCheck.requireNotNull(item);
+            NullCheck.requireNonNull(item);
             return this.addEntry(item, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
         }
 
         EntryCollectStage addStackEntries(@NotNull Collection<@NotNull ItemStack> items, ItemGroup.StackVisibility visibility);
 
         default EntryCollectStage addStackEntries(@NotNull Collection<@NotNull ItemStack> items) {
-            CheckUtil.NullCheck.requireAllNotNull(items);
+            NullCheck.requireAllNonNull(items);
             return this.addStackEntries(items, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
         }
 
         default EntryCollectStage addItemConvertibleEntries(@NotNull Collection<@NotNull ItemConvertible> items, ItemGroup.StackVisibility visibility) {
-            CheckUtil.NullCheck.requireAllNotNull(items);
-            CheckUtil.NullCheck.requireNotNull(visibility);
+            NullCheck.requireAllNonNull(items);
+            NullCheck.requireNonNull(visibility);
             List<ItemStack> stacks = items.stream()
-                .filter(CheckUtil.NullCheck::nonNull)
+                .filter(NullCheck::nonNull)
                 .map(ItemStack::new)
                 .toList();
 
@@ -119,10 +119,10 @@ public interface ItemGroupPreRegistrable
         }
 
         default EntryCollectStage addItemEntries(@NotNull Collection<@NotNull Item> items, ItemGroup.StackVisibility visibility) {
-            CheckUtil.NullCheck.requireAllNotNull(items);
-            CheckUtil.NullCheck.requireNotNull(visibility);
+            NullCheck.requireAllNonNull(items);
+            NullCheck.requireNonNull(visibility);
             List<ItemStack> stacks = items.stream()
-                .filter(CheckUtil.NullCheck::nonNull)
+                .filter(NullCheck::nonNull)
                 .map(ItemStack::new)
                 .toList();
 

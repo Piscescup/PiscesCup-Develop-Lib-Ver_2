@@ -1,6 +1,6 @@
 package io.github.piscescup.mc.fabric.register.recipe.crafting;
 
-import io.github.piscescup.mc.fabric.util.CheckUtil;
+import io.github.piscescup.mc.fabric.utils.CheckUtils.NullCheck;
 import net.minecraft.advancement.AdvancementCriterion;
 import net.minecraft.item.ItemConvertible;
 import org.jetbrains.annotations.NotNull;
@@ -40,8 +40,8 @@ public abstract sealed class CraftingRecipe<R extends CraftingRecipe<R>>
 
     @SuppressWarnings("unchecked")
     public R criteria(@NotNull String name, @NotNull AdvancementCriterion<?> criterion) {
-        CheckUtil.NullCheck.requireNotNull(name);
-        CheckUtil.NullCheck.requireNotNull(criterion);
+        NullCheck.requireNonNull(name);
+        NullCheck.requireNonNull(criterion);
         this.criteria.put(name, criterion);
         return (R) this;
     }
@@ -64,7 +64,7 @@ public abstract sealed class CraftingRecipe<R extends CraftingRecipe<R>>
 
     @SuppressWarnings("unchecked")
     public R collectTo(@NotNull CraftingRecipeContainer<R> container) {
-        CheckUtil.NullCheck.requireNotNull(container);
+        NullCheck.requireNonNull(container);
         container.add((R) this);
         return (R) this;
     }

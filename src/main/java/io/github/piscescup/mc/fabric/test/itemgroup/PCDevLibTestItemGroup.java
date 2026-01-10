@@ -2,7 +2,7 @@ package io.github.piscescup.mc.fabric.test.itemgroup;
 
 import io.github.piscescup.mc.fabric.register.itemgroup.ItemGroupRegister;
 import io.github.piscescup.mc.fabric.test.item.PCDevLibTestItem;
-import io.github.piscescup.mc.fabric.util.MCLanguage;
+import io.github.piscescup.mc.fabric.utils.constant.MCLanguage;
 import net.minecraft.item.ItemGroup;
 
 import static io.github.piscescup.mc.fabric.References.*;

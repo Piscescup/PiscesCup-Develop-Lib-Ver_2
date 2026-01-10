@@ -1,6 +1,6 @@
 package io.github.piscescup.mc.fabric.register.recipe.crafting;
 
-import io.github.piscescup.mc.fabric.util.CheckUtil;
+import io.github.piscescup.mc.fabric.utils.CheckUtils.NullCheck;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,7 +44,7 @@ public class CraftingRecipeContainer<T extends CraftingRecipe<T>> implements Lis
 
     @Override
     public boolean contains(Object o) {
-        CheckUtil.NullCheck.requireNotNull(o);
+        NullCheck.requireNonNull(o);
         return recipes.contains(o);
     }
 

@@ -1,8 +1,8 @@
 package io.github.piscescup.mc.fabric.register;
 
-import io.github.piscescup.mc.fabric.datagen.lang.LanguageGenProvider;
+import io.github.piscescup.mc.fabric.datagen.lang.LanguageDataGenProvider;
 import io.github.piscescup.mc.fabric.datagen.lang.Translation;
-import io.github.piscescup.mc.fabric.util.MCLanguage;
+import io.github.piscescup.mc.fabric.utils.constant.MCLanguage;
 import net.minecraft.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,7 +46,7 @@ public interface PostRegistrable<
      * @param value The localized string value for the target language
      * @return the Fluent {@link PostRegistrable} instance for chaining (typically {@code this})
      * @see MCLanguage
-     * @see LanguageGenProvider
+     * @see LanguageDataGenProvider
      * @throws NullPointerException if {@code lang} or {@code value} is null
      */
     @SuppressWarnings("unchecked")

@@ -1,7 +1,8 @@
 package io.github.piscescup.mc.fabric.register.block;
 
 import io.github.piscescup.mc.fabric.register.Register;
-import io.github.piscescup.mc.fabric.util.CheckUtil;
+import io.github.piscescup.mc.fabric.utils.CheckUtils;
+import io.github.piscescup.mc.fabric.utils.CheckUtils.NullCheck;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.registry.Registries;
@@ -29,7 +30,7 @@ public class BlockRegister
     private Function<AbstractBlock.Settings, Block> factory = Block::new;
 
     private BlockRegister(@NotNull Identifier id) {
-        CheckUtil.NullCheck.requireNotNull(id);
+        NullCheck.requireNonNull(id);
         super(RegistryKeys.BLOCK, id);
     }
 
@@ -38,8 +39,8 @@ public class BlockRegister
         @NotNull String namespace,
         @NotNull String path
     ) {
-        CheckUtil.NullCheck.requireNotNull(namespace);
-        CheckUtil.NullCheck.requireNotNull(path);
+        NullCheck.requireNonNull(namespace);
+        NullCheck.requireNonNull(path);
         return new BlockRegister(Identifier.of(namespace, path));
     }
 
@@ -47,7 +48,7 @@ public class BlockRegister
     public static @NotNull BlockPreRegistrable createFor(
         @NotNull Identifier id
     ) {
-        CheckUtil.NullCheck.requireNotNull(id);
+        NullCheck.requireNonNull(id);
         return new BlockRegister(id);
     }
 
@@ -66,14 +67,14 @@ public class BlockRegister
 
     @Override
     public BlockPreRegistrable settings(@NotNull AbstractBlock.Settings settings) {
-        CheckUtil.NullCheck.requireNotNull(settings);
+        NullCheck.requireNonNull(settings);
         this.settings = settings;
         return this;
     }
 
     @Override
     public BlockPreRegistrable factory(@NotNull Function<AbstractBlock.Settings, net.minecraft.block.Block> factory) {
-        CheckUtil.NullCheck.requireNotNull(factory);
+        NullCheck.requireNonNull(factory);
         this.factory = factory;
         return this;
     }

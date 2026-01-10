@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.registry.RegistryWrapper;
 
+import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -19,12 +20,15 @@ import java.util.concurrent.CompletableFuture;
 public class LanguageDataGenProvider
     extends FabricLanguageProvider
 {
+    private final Collection<Translation.TranslationEntry> translations;
+
     public LanguageDataGenProvider(
         FabricDataOutput dataOutput,
         MCLanguage lang,
         CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup
     ) {
         super(dataOutput, lang.getCode(), registryLookup);
+        this.translations = Translation.getLangTranslations(lang);
     }
 
     @Override
@@ -32,6 +36,8 @@ public class LanguageDataGenProvider
         RegistryWrapper.WrapperLookup wrapperLookup,
         TranslationBuilder translationBuilder
     ) {
-
+        this.translations.forEach(
+            entry -> entry.offerToTranslationBuilder(translationBuilder)
+        );
     }
 }
