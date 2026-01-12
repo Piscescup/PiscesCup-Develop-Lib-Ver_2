@@ -1,7 +1,8 @@
 package io.github.piscescup.mc.fabric;
 
 import io.github.piscescup.mc.fabric.test.item.PCDevLibTestItem;
-import io.github.piscescup.mc.fabric.test.itemgroup.PCDevLibTestItemGroup;
+import io.github.piscescup.mc.fabric.test.itemgroup.PCDevLibTestItemGroups;
+import io.github.piscescup.mc.fabric.test.tag.PCDevLibTestItemTags;
 import net.fabricmc.api.ModInitializer;
 
 import static io.github.piscescup.mc.fabric.References.*;
@@ -23,8 +24,11 @@ public class PCDevelopLib implements ModInitializer {
         MOD_LOGGER.info(MOD_FLAG);
         MOD_LOGGER.info(THANKS);
 
-        PCDevLibTestItem.register();
-        PCDevLibTestItemGroup.register();
+        RegisterLamp.create()
+                .addModule(PCDevLibTestItem::new)
+                .addModule(PCDevLibTestItemGroups::new)
+                .addModule(PCDevLibTestItemTags::new)
+                .registerAll(MOD_NAME);
 
         MOD_LOGGER.info(MOD_FINISH);
 	}
