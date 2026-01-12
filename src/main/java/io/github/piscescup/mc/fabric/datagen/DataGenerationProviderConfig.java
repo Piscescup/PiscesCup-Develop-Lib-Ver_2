@@ -1,8 +1,6 @@
 package io.github.piscescup.mc.fabric.datagen;
 
-import io.github.piscescup.mc.fabric.utils.constant.MCLanguage;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 
 import java.util.ArrayList;

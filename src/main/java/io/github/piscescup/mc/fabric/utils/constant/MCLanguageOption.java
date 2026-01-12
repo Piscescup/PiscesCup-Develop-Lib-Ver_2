@@ -17,7 +17,7 @@ import java.util.Arrays;
  * @Date 2025-12-17
  * @since
  */
-public enum MCLanguage implements DataGenOption {
+public enum MCLanguageOption implements DataGenOption {
     /**
      * Afrikaans
      */
@@ -690,9 +690,9 @@ public enum MCLanguage implements DataGenOption {
 
     private final String code;
 
-    public static final MCLanguage[] LANGUAGES = MCLanguage.values();
+    public static final MCLanguageOption[] LANGUAGES = MCLanguageOption.values();
 
-    MCLanguage(String code) {
+    MCLanguageOption(String code) {
         this.code = code;
     }
 
@@ -700,7 +700,7 @@ public enum MCLanguage implements DataGenOption {
         return code;
     }
 
-    public static MCLanguage fromLangCode(String code) {
+    public static MCLanguageOption fromLangCode(String code) {
         return Arrays.stream(LANGUAGES)
             .filter(lang -> lang.getCode().equals(code))
             .findFirst()

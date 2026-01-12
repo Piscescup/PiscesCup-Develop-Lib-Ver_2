@@ -2,7 +2,7 @@ package io.github.piscescup.mc.fabric.test.itemgroup;
 
 import io.github.piscescup.mc.fabric.register.itemgroup.ItemGroupRegister;
 import io.github.piscescup.mc.fabric.test.item.PCDevLibTestItem;
-import io.github.piscescup.mc.fabric.utils.constant.MCLanguage;
+import io.github.piscescup.mc.fabric.utils.constant.MCLanguageOption;
 import net.minecraft.item.ItemGroup;
 
 import static io.github.piscescup.mc.fabric.References.*;
@@ -20,8 +20,8 @@ public final class PCDevLibTestItemGroup {
         .defaultTexture()
         .addItemEntries(PCDevLibTestItem.PC_DEV_LIB_ITEMS)
         .register()
-        .translate(MCLanguage.EN_US, "Test Item Group 1")
-        .translate(MCLanguage.ZH_CN, "测试创造物品栏 1")
+        .translate(MCLanguageOption.EN_US, "Test Item Group 1")
+        .translate(MCLanguageOption.ZH_CN, "测试创造物品栏 1")
         .get();
 
 
