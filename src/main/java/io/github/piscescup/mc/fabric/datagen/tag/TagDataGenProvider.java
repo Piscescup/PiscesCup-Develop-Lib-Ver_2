@@ -48,7 +48,4 @@ public class TagDataGenProvider<T> extends TagProvider<T> {
             });
     }
 
-    protected ProvidedTagBuilder<T, T> builder(TagKey<T> tag) {
-        return
-    }
 }
