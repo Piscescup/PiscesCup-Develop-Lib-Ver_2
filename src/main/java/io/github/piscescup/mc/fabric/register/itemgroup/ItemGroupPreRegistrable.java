@@ -118,7 +118,7 @@ public interface ItemGroupPreRegistrable
             return this.addItemConvertibleEntries(items, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
         }
 
-        default EntryCollectStage addItemEntries(@NotNull Collection<@NotNull Item> items, ItemGroup.StackVisibility visibility) {
+        default EntryCollectStage addItemEntries(@NotNull Collection<Item> items, ItemGroup.StackVisibility visibility) {
             NullCheck.requireAllNonNull(items);
             NullCheck.requireNonNull(visibility);
             List<ItemStack> stacks = items.stream()

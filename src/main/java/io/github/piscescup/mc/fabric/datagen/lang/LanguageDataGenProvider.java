@@ -1,6 +1,6 @@
 package io.github.piscescup.mc.fabric.datagen.lang;
 
-import io.github.piscescup.mc.fabric.utils.constant.MCLanguage;
+import io.github.piscescup.mc.fabric.utils.constant.MCLanguageOption;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.registry.RegistryWrapper;
@@ -24,7 +24,7 @@ public class LanguageDataGenProvider
 
     public LanguageDataGenProvider(
         FabricDataOutput dataOutput,
-        MCLanguage lang,
+        MCLanguageOption lang,
         CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup
     ) {
         super(dataOutput, lang.getCode(), registryLookup);

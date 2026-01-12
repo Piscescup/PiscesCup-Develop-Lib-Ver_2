@@ -2,9 +2,8 @@ package io.github.piscescup.mc.fabric.test.item;
 
 import io.github.piscescup.mc.fabric.register.item.ItemRegister;
 import io.github.piscescup.mc.fabric.test.item.custom.TestCustomItem;
-import io.github.piscescup.mc.fabric.utils.constant.MCLanguage;
+import io.github.piscescup.mc.fabric.utils.constant.MCLanguageOption;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +26,8 @@ public final class PCDevLibTestItem {
             .fireproof()
         )
         .register()
-        .translate(MCLanguage.EN_US, "PCDevLib Test Item 1")
-        .translate(MCLanguage.ZH_CN, "PCDevLib 测试物品 1")
+        .translate(MCLanguageOption.EN_US, "PCDevLib Test Item 1")
+        .translate(MCLanguageOption.ZH_CN, "PCDevLib 测试物品 1")
         .collectsTo(PC_DEV_LIB_ITEMS)
         .get();
 
@@ -38,8 +37,8 @@ public final class PCDevLibTestItem {
         )
         .factory(TestCustomItem::new)
         .register()
-        .translate(MCLanguage.EN_US, "PCDevLib Custom Item")
-        .translate(MCLanguage.ZH_CN, "PCDevLib 自定义物品")
+        .translate(MCLanguageOption.EN_US, "PCDevLib Custom Item")
+        .translate(MCLanguageOption.ZH_CN, "PCDevLib 自定义物品")
         .collectsTo(PC_DEV_LIB_ITEMS)
         .get();
 

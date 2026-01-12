@@ -1,6 +1,6 @@
 package io.github.piscescup.mc.fabric.datagen.lang;
 
-import io.github.piscescup.mc.fabric.utils.constant.MCLanguage;
+import io.github.piscescup.mc.fabric.utils.constant.MCLanguageOption;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
@@ -32,7 +32,7 @@ import static io.github.piscescup.mc.fabric.utils.CheckUtils.NullCheck;
  * @since 1.0.0
  */
 public class Translation {
-    private static final Map<MCLanguage, Queue<TranslationEntry>> TRANSLATION_MAP = new ConcurrentHashMap<>();
+    private static final Map<MCLanguageOption, Queue<TranslationEntry>> TRANSLATION_MAP = new ConcurrentHashMap<>();
 
     private Translation() {}
 
@@ -41,10 +41,10 @@ public class Translation {
      * @param thing The thing to be translated.
      * @param lang The language of the translation.
      * @param translation The translation string.
-     * @see MCLanguage
+     * @see MCLanguageOption
      * @throws NullPointerException if {@code thing} or {@code translation} is null.
      */
-    public static void putTranslation(Object thing, MCLanguage lang, String translation) {
+    public static void putTranslation(Object thing, MCLanguageOption lang, String translation) {
         NullCheck.requireNonNull(thing, "Thing to be translated must not be null");
         NullCheck.requireNonNull(translation, "Translation must not be null");
 
@@ -58,9 +58,9 @@ public class Translation {
      * @param thing The thing to be translated.
      * @param entry The translation entry.
      * @throws NullPointerException if {@code thing} or {@code entry} is null.
-     * @see MCLanguage
+     * @see MCLanguageOption
      */
-    public static void putTranslation(MCLanguage thing, TranslationEntry entry) {
+    public static void putTranslation(MCLanguageOption thing, TranslationEntry entry) {
         NullCheck.requireNonNull(thing);
         NullCheck.requireNonNull(entry);
 
@@ -74,9 +74,9 @@ public class Translation {
      * @param lang The language of the translation.
      * @param entries The translation entries.
      * @throws NullPointerException if {@code lang} or {@code entries} is null.
-     * @see MCLanguage
+     * @see MCLanguageOption
      */
-    public static void putTranslations(MCLanguage lang, List<TranslationEntry> entries) {
+    public static void putTranslations(MCLanguageOption lang, List<TranslationEntry> entries) {
         NullCheck.requireNonNull(lang);
         NullCheck.requireAllNonNull(entries);
 
@@ -90,9 +90,9 @@ public class Translation {
      * @param lang The language of the translation.
      * @param entries The translation entries.
      * @throws NullPointerException if {@code lang} or {@code entries} is null.
-     * @see MCLanguage
+     * @see MCLanguageOption
      */
-    public static void putTranslations(MCLanguage lang, TranslationEntry... entries) {
+    public static void putTranslations(MCLanguageOption lang, TranslationEntry... entries) {
         NullCheck.requireNonNull(lang);
         NullCheck.requireAllNonNull(entries);
 
@@ -106,7 +106,7 @@ public class Translation {
      * @param lang The language.
      * @return All translation entries for the given language.
      */
-    public static List<TranslationEntry> getLangTranslations(MCLanguage lang) {
+    public static List<TranslationEntry> getLangTranslations(MCLanguageOption lang) {
         NullCheck.requireNonNull(lang);
         Queue<TranslationEntry> queue = TRANSLATION_MAP.get(lang);
         return queue == null ? Collections.emptyList() : List.copyOf(queue);
