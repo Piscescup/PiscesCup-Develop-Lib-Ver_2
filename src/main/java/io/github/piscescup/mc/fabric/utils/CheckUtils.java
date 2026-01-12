@@ -1,20 +1,11 @@
 package io.github.piscescup.mc.fabric.utils;
 
-
-import com.mojang.datafixers.types.Func;
-import org.lwjgl.opengl.ARBCullDistance;
-
-import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * <h2>Description</h2>
- *
- * <h2>Usages</h2>
  *
  * @author REN YuanTong
- * @Date 2026-01-09
  * @since 1.0.0
  */
 public final class CheckUtils {
@@ -116,11 +107,6 @@ public final class CheckUtils {
         public static <T> T[] requireAllNonNull(T[] array) {
             return requireAllNonNull(array, ARRAY_NULL_MESSAGE_FUNC.apply(array));
         }
-
-
-
-
-
 
 
     }
