@@ -120,7 +120,7 @@ public class ItemGroupRegister
 
 
     @Override
-    public ItemGroupPreRegistrable.EntryCollectStage addEntry(@NotNull ItemStack stack, ItemGroup.StackVisibility visibility) {
+    public ItemGroupPreRegistrable.EntryCollectStage addStackEntry(@NotNull ItemStack stack, ItemGroup.StackVisibility visibility) {
         this.entries.put(stack, visibility);
         return this;
     }
