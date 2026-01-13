@@ -16,22 +16,19 @@ import java.util.function.Supplier;
 
 
 /**
- * A pre-registration builder API for creating and registering an
- * {@link ItemGroup}.
+ * A staged pre-registration builder API for creating and registering an {@link ItemGroup}.
  *
- * <p>This interface provides a staged, fluent configuration pipeline for
- * defining all properties required to construct an {@link ItemGroup},
- * including its position, icon, visual appearance, background texture,
- * and displayed entries.
+ * <p>This interface implements a <b>fluent builder pattern with compile-time enforced ordering</b>,
+ * ensuring that {@link ItemGroup} instances are configured in the correct sequence:
  *
- * <p>The staged design enforces the correct configuration order at
- * compile time, ensuring that all mandatory attributes are supplied
- * before registration occurs.
+ * <pre>
+ * Position → Icon → Appearance → Texture → Entry Collection → Registration
+ * </pre>
  *
- * <p>Methods return the next stage of the builder to enable fluent and
- * type-safe chaining.
+ * <p>Each nested stage interface represents a mandatory configuration step that must be completed
+ * before proceeding to the next. Skipping or reordering stages is prevented at compile time.
  *
- * <p>Intended for use in Fabric-based mod development.
+ * <p>Designed for Fabric mod development.
  *
  * @author REN YuanTong
  * @since 1.0.0
@@ -39,45 +36,31 @@ import java.util.function.Supplier;
 public interface ItemGroupPreRegistrable
 {
     /**
-     * Builder stage for configuring the position of the {@link ItemGroup}
-     * within the creative inventory tab layout.
-     *
-     * <p>This stage defines where the item group tab will appear by specifying
-     * its row and column.
-     *
-     * <p>Methods return the next builder stage to enable fluent chaining.
-     *
-     * @since 1.0.0
+     * Stage for configuring the position of the item group within the creative inventory tab grid.
      */
     interface PositionStage {
 
         /**
          * Sets the row and column position of the item group tab.
          *
-         * @param row    the creative inventory row
+         * @param row    the creative tab row
          * @param column the column index within the row
-         * @return the next stage for icon configuration
+         * @return next stage for icon configuration
+         * @throws NullPointerException if {@code row} is null
          */
         IconStage position(ItemGroup.Row row, int column);
     }
 
     /**
-     * Builder stage for configuring the icon of the {@link ItemGroup}.
-     *
-     * <p>The icon is displayed in the creative inventory tab header.
-     * Implementations may supply the icon lazily via a {@link Supplier}.
-     *
-     * <p>Methods return the next builder stage to enable fluent chaining.
-     *
-     * @since 1.0.0
+     * Stage for defining the icon of the item group.
      */
     interface IconStage {
 
         /**
-         * Sets the icon supplier used to create the tab icon.
+         * Sets the icon supplier for this item group.
          *
-         * @param iconSupplier supplier producing the icon {@link ItemStack}
-         * @return the next stage for appearance configuration
+         * @param iconSupplier a supplier that produces the icon {@link ItemStack}; must not be null
+         * @return next stage for appearance configuration
          * @throws NullPointerException if {@code iconSupplier} is null
          */
         AppearanceStage icon(@NotNull Supplier<ItemStack> iconSupplier);
@@ -85,8 +68,8 @@ public interface ItemGroupPreRegistrable
         /**
          * Sets the icon using an {@link ItemConvertible}.
          *
-         * @param item the item used as the icon
-         * @return the next stage for appearance configuration
+         * @param item the item used as icon; must not be null
+         * @return next stage for appearance configuration
          * @throws NullPointerException if {@code item} is null
          */
         default AppearanceStage icon(@NotNull ItemConvertible item) {
@@ -95,12 +78,11 @@ public interface ItemGroupPreRegistrable
         }
 
         /**
-         * Sets the icon using a predefined {@link ItemStack}.
+         * Sets the icon using a prebuilt {@link ItemStack}.
+         * The provided stack will be copied internally.
          *
-         * <p>The provided stack will be copied internally.
-         *
-         * @param icon the icon stack
-         * @return the next stage for appearance configuration
+         * @param icon the icon stack; must not be null
+         * @return next stage for appearance configuration
          * @throws NullPointerException if {@code icon} is null
          */
         default AppearanceStage icon(@NotNull ItemStack icon) {
@@ -111,8 +93,8 @@ public interface ItemGroupPreRegistrable
         /**
          * Sets the icon using an {@link Item}.
          *
-         * @param item the item used as the icon
-         * @return the next stage for appearance configuration
+         * @param item the item used as icon; must not be null
+         * @return next stage for appearance configuration
          * @throws NullPointerException if {@code item} is null
          */
         default AppearanceStage icon(@NotNull Item item) {
@@ -121,9 +103,9 @@ public interface ItemGroupPreRegistrable
         }
 
         /**
-         * Uses {@link ItemStack#EMPTY} as the tab icon.
+         * Uses {@link ItemStack#EMPTY} as the icon.
          *
-         * @return the next stage for appearance configuration
+         * @return next stage for appearance configuration
          */
         default AppearanceStage emptyIcon() {
             return this.icon(() -> ItemStack.EMPTY);
@@ -131,25 +113,17 @@ public interface ItemGroupPreRegistrable
     }
 
     /**
-     * Builder stage for configuring visual appearance options of the
-     * {@link ItemGroup}.
-     *
-     * <p>This stage controls UI-related flags such as scrollbar visibility
-     * and display name rendering.
-     *
-     * <p>Methods return the next builder stage to enable fluent chaining.
-     *
-     * @since 1.0.0
+     * Stage for configuring visual appearance options of the item group.
      */
     interface AppearanceStage {
 
         /**
-         * Configures appearance-related flags of the item group.
+         * Configures the visual appearance flags of the item group.
          *
-         * @param scrollbar         whether the scrollbar is enabled
-         * @param renderDisplayName whether the display name is rendered
-         * @param specialItemGroup  whether the group is treated as special
-         * @return the next stage for texture configuration
+         * @param scrollbar           whether to show the scrollbar
+         * @param renderDisplayName   whether to render the display name
+         * @param specialItemGroup    whether this is treated as a special group
+         * @return next stage for texture configuration
          */
         TextureStage appearance(boolean scrollbar,
                                 boolean renderDisplayName,
@@ -158,16 +132,16 @@ public interface ItemGroupPreRegistrable
         /**
          * Applies the default appearance configuration.
          *
-         * @return the next stage for texture configuration
+         * @return next stage for texture configuration
          */
         default TextureStage defaultAppearance() {
             return this.appearance(true, true, false);
         }
 
         /**
-         * Applies the default appearance configuration and marks the group as special.
+         * Applies the default appearance but marks the group as special.
          *
-         * @return the next stage for texture configuration
+         * @return next stage for texture configuration
          */
         default TextureStage specialAppearance() {
             return this.appearance(true, true, true);
@@ -175,46 +149,39 @@ public interface ItemGroupPreRegistrable
     }
 
     /**
-     * Builder stage for configuring the background texture of the
-     * {@link ItemGroup} tab.
-     *
-     * <p>This stage determines which texture is used when rendering
-     * the creative inventory tab.
-     *
-     * <p>Methods return the next builder stage to enable fluent chaining.
-     *
-     * @since 1.0.0
+     * Stage for configuring the tab background texture.
      */
     interface TextureStage {
 
         /**
-         * The default vanilla item group tab texture.
+         * Default vanilla item group texture identifier.
          */
         Identifier ITEMS = getVanillaTabTextureId("items");
 
         /**
-         * Sets the background texture used by the item group tab.
+         * Sets the background texture used for this item group tab.
          *
-         * @param texture the texture identifier
-         * @return the next stage for entry collection
+         * @param texture texture identifier; must not be null
+         * @return next stage for entry collection
          * @throws NullPointerException if {@code texture} is null
          */
         EntryCollectStage texture(@NotNull Identifier texture);
 
         /**
-         * Uses the default vanilla item group tab texture.
+         * Uses the default vanilla item group texture.
          *
-         * @return the next stage for entry collection
+         * @return next stage for entry collection
          */
         default EntryCollectStage defaultTexture() {
             return this.texture(ITEMS);
         }
 
         /**
-         * Resolves the identifier of a vanilla creative tab texture.
+         * Resolves a vanilla creative tab texture identifier.
          *
-         * @param name the vanilla tab name
-         * @return the resolved texture identifier
+         * @param name vanilla tab name; must not be null
+         * @return texture identifier
+         * @throws NullPointerException if {@code name} is null
          */
         static Identifier getVanillaTabTextureId(@NotNull String name) {
             return Identifier.ofVanilla(
@@ -224,28 +191,18 @@ public interface ItemGroupPreRegistrable
     }
 
     /**
-     * Builder stage for collecting item entries and completing
-     * the {@link ItemGroup} registration process.
-     *
-     * <p>This stage allows adding item entries in multiple forms and
-     * supports both direct entry addition and context-based collection.
-     *
-     * <p>Once all entries are defined, registration can be finalized
-     * via {@link PreRegistrable}.
-     *
-     * <p>Methods return this stage to enable fluent chaining.
-     *
-     * @since 1.0.0
+     * Stage for collecting item entries and finalizing registration.
      */
     interface EntryCollectStage
         extends PreRegistrable<ItemGroupPostRegistrable>
     {
         /**
-         * Adds a single {@link ItemStack} entry with explicit visibility.
+         * Adds a single item stack entry with explicit visibility.
          *
-         * @param stack      the item stack to add
-         * @param visibility the visibility of the stack
-         * @return this stage for method chaining
+         * @param stack       item stack to add; must not be null
+         * @param visibility  stack visibility; must not be null
+         * @return this stage for chaining
+         * @throws NullPointerException if {@code stack} or {@code visibility} is null
          */
         EntryCollectStage addStackEntry(
             @NotNull ItemStack stack,
@@ -253,10 +210,11 @@ public interface ItemGroupPreRegistrable
         );
 
         /**
-         * Adds a single {@link ItemStack} entry with default visibility.
+         * Adds a single item stack with default visibility.
          *
-         * @param item the item stack to add
-         * @return this stage for method chaining
+         * @param item item stack to add; must not be null
+         * @return this stage for chaining
+         * @throws NullPointerException if {@code item} is null
          */
         default EntryCollectStage addStackEntry(@NotNull ItemStack item) {
             NullCheck.requireNonNull(item);
@@ -264,11 +222,41 @@ public interface ItemGroupPreRegistrable
         }
 
         /**
-         * Adds multiple {@link ItemStack} entries.
+         * Adds an {@link ItemConvertible} entry with specified visibility.
          *
-         * @param items      the item stacks to add
-         * @param visibility the visibility of the stacks
-         * @return this stage for method chaining
+         * @param item        item to add; must not be null
+         * @param visibility  stack visibility; must not be null
+         * @return this stage for chaining
+         * @throws NullPointerException if {@code item} or {@code visibility} is null
+         */
+        default EntryCollectStage addItemConvertibleEntry(
+            @NotNull ItemConvertible item,
+            ItemGroup.StackVisibility visibility
+        ) {
+            NullCheck.requireNonNull(item);
+            NullCheck.requireNonNull(visibility);
+            return this.addStackEntry(new ItemStack(item), visibility);
+        }
+
+        /**
+         * Adds an {@link ItemConvertible} entry with default visibility.
+         *
+         * @param item item to add; must not be null
+         * @return this stage for chaining
+         * @throws NullPointerException if {@code item} is null
+         */
+        default EntryCollectStage addItemConvertibleEntry(@NotNull ItemConvertible item) {
+            NullCheck.requireNonNull(item);
+            return this.addItemConvertibleEntry(item, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
+        }
+
+        /**
+         * Adds multiple {@link ItemStack} entries with specified visibility.
+         *
+         * @param items       item stacks; must not be null and must not contain null elements
+         * @param visibility  stack visibility; must not be null
+         * @return this stage for chaining
+         * @throws NullPointerException if {@code items} or {@code visibility} is null, or if {@code items} contains null
          */
         EntryCollectStage addStackEntries(
             @NotNull Collection<@NotNull ItemStack> items,
@@ -278,29 +266,99 @@ public interface ItemGroupPreRegistrable
         /**
          * Adds multiple {@link ItemStack} entries with default visibility.
          *
-         * @param items the item stacks to add
-         * @return this stage for method chaining
+         * @param items item stacks; must not be null and must not contain null elements
+         * @return this stage for chaining
+         * @throws NullPointerException if {@code items} is null or contains null
          */
-        default EntryCollectStage addStackEntries(
-            @NotNull Collection<@NotNull ItemStack> items
-        ) {
+        default EntryCollectStage addStackEntries(@NotNull Collection<@NotNull ItemStack> items) {
             NullCheck.requireAllNonNull(items);
             return this.addStackEntries(items, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
         }
 
         /**
+         * Adds multiple {@link ItemConvertible} entries with specified visibility.
+         *
+         * @param items       items to add; must not be null and must not contain null elements
+         * @param visibility  stack visibility; must not be null
+         * @return this stage for chaining
+         * @throws NullPointerException if {@code items} or {@code visibility} is null, or if {@code items} contains null
+         */
+        default EntryCollectStage addItemConvertibleEntries(
+            @NotNull Collection<@NotNull ItemConvertible> items,
+            ItemGroup.StackVisibility visibility
+        ) {
+            NullCheck.requireAllNonNull(items);
+            NullCheck.requireNonNull(visibility);
+
+            List<ItemStack> stacks = items.stream()
+                .map(ItemStack::new)
+                .toList();
+
+            return this.addStackEntries(stacks, visibility);
+        }
+
+        /**
+         * Adds multiple {@link ItemConvertible} entries with default visibility.
+         *
+         * @param items items to add; must not be null and must not contain null elements
+         * @return this stage for chaining
+         * @throws NullPointerException if {@code items} is null or contains null
+         */
+        default EntryCollectStage addItemConvertibleEntries(
+            @NotNull Collection<@NotNull ItemConvertible> items
+        ) {
+            return this.addItemConvertibleEntries(
+                items,
+                ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS
+            );
+        }
+
+        /**
+         * Adds multiple {@link Item} entries with specified visibility.
+         *
+         * @param items       items to add; must not be null and must not contain null elements
+         * @param visibility  stack visibility; must not be null
+         * @return this stage for chaining
+         * @throws NullPointerException if {@code items} or {@code visibility} is null, or if {@code items} contains null
+         */
+        default EntryCollectStage addItemEntries(@NotNull Collection<Item> items,
+                                                 ItemGroup.StackVisibility visibility) {
+            NullCheck.requireAllNonNull(items);
+            NullCheck.requireNonNull(visibility);
+
+            List<ItemStack> stacks = items.stream()
+                .map(ItemStack::new)
+                .toList();
+
+            return this.addStackEntries(stacks, visibility);
+        }
+
+        /**
+         * Adds multiple {@link Item} entries with default visibility.
+         *
+         * @param items items to add; must not be null and must not contain null elements
+         * @return this stage for chaining
+         * @throws NullPointerException if {@code items} is null or contains null
+         */
+        default EntryCollectStage addItemEntries(@NotNull Collection<@NotNull Item> items) {
+            return this.addItemEntries(items, ItemGroup.StackVisibility.PARENT_AND_SEARCH_TABS);
+        }
+
+        /**
          * Collects entries using a raw {@link ItemGroup.EntryCollector}.
          *
-         * @param collector the entry collector
-         * @return this stage for method chaining
+         * @param collector collector callback; must not be null
+         * @return this stage for chaining
+         * @throws NullPointerException if {@code collector} is null
          */
         EntryCollectStage collectBy(@NotNull ItemGroup.EntryCollector collector);
 
         /**
-         * Collects entries using a {@link ItemGroup.DisplayContext}-aware action.
+         * Collects entries using a display context consumer.
          *
-         * @param action the context-based collection logic
-         * @return this stage for method chaining
+         * @param action context-based collector; must not be null
+         * @return this stage for chaining
+         * @throws NullPointerException if {@code action} is null
          */
         EntryCollectStage collectByContext(
             @NotNull Consumer<ItemGroup.DisplayContext> action
