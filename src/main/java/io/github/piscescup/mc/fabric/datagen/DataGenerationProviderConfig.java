@@ -124,6 +124,13 @@ public final class DataGenerationProviderConfig {
         return this;
     }
 
+    public DataGenerationProviderConfig addCustomFactory(
+        @NotNull FabricDataGenerator.Pack.RegistryDependentFactory<DataProvider> factory
+    ) {
+        this.registryDependentFactories.add(factory);
+        return this;
+    }
+
     /**
      * Applies all collected provider factories to the given data
      * generation pack.

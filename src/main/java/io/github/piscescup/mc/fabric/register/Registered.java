@@ -1,4 +1,4 @@
-package io.github.piscescup.mc.fabric;
+package io.github.piscescup.mc.fabric.register;
 
 import static io.github.piscescup.mc.fabric.References.*;
 

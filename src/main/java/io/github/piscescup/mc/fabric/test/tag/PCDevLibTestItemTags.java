@@ -1,6 +1,6 @@
 package io.github.piscescup.mc.fabric.test.tag;
 
-import io.github.piscescup.mc.fabric.Registered;
+import io.github.piscescup.mc.fabric.register.Registered;
 import io.github.piscescup.mc.fabric.register.tag.TagKeyRegister;
 import io.github.piscescup.mc.fabric.utils.constant.MCLanguageOption;
 import net.minecraft.item.Item;

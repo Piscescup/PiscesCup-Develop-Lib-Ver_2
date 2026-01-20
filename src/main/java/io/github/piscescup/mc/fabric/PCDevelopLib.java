@@ -1,5 +1,6 @@
 package io.github.piscescup.mc.fabric;
 
+import io.github.piscescup.mc.fabric.register.RegisterLamp;
 import io.github.piscescup.mc.fabric.test.item.PCDevLibTestItem;
 import io.github.piscescup.mc.fabric.test.itemgroup.PCDevLibTestItemGroups;
 import io.github.piscescup.mc.fabric.test.tag.PCDevLibTestItemTags;

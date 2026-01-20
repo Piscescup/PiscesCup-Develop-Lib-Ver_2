@@ -1,6 +1,6 @@
 package io.github.piscescup.mc.fabric.test.itemgroup;
 
-import io.github.piscescup.mc.fabric.Registered;
+import io.github.piscescup.mc.fabric.register.Registered;
 import io.github.piscescup.mc.fabric.register.itemgroup.ItemGroupRegister;
 import io.github.piscescup.mc.fabric.test.item.PCDevLibTestItem;
 import io.github.piscescup.mc.fabric.utils.constant.MCLanguageOption;

@@ -1,4 +1,4 @@
-package io.github.piscescup.mc.fabric;
+package io.github.piscescup.mc.fabric.register;
 
 import io.github.piscescup.mc.fabric.utils.CheckUtils;
 
