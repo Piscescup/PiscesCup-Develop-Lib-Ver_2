@@ -3,11 +3,14 @@ package io.github.piscescup.mc.fabric.datagen.lang;
 import io.github.piscescup.mc.fabric.utils.constant.MCLanguageOption;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.block.Block;
+import net.minecraft.datafixer.fix.VillagerCanPickUpLootFix;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.SoundEvent;
@@ -15,6 +18,7 @@ import net.minecraft.stat.StatType;
 import net.minecraft.text.TextContent;
 import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Identifier;
+import net.minecraft.village.VillagerProfession;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -77,7 +81,6 @@ public class Translation {
      * @see MCLanguageOption
      */
     public static void putTranslations(MCLanguageOption lang, List<TranslationEntry> entries) {
-        NullCheck.requireNonNull(lang);
         NullCheck.requireAllNonNull(entries);
 
         TRANSLATION_MAP
@@ -166,6 +169,8 @@ public class Translation {
                         path.toString(), e.getMessage()
                     );
                 }
+            } else if (thing instanceof VillagerProfession profession) {
+                builder.add(profession.id().getString(), translation);
             }
         }
 

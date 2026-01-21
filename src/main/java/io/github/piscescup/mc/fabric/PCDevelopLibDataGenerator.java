@@ -15,6 +15,7 @@ public class PCDevelopLibDataGenerator implements DataGeneratorEntrypoint {
 			.addLanguageFactory(MCLanguageOption.ZH_CN)
 			.addLanguageFactory(MCLanguageOption.EN_US)
 			.addTagKeyFactory(TagKeyGenerationOption.ITEM_TAGS)
+			.addTagKeyFactory(TagKeyGenerationOption.POINT_OF_INTEREST_TYPE_TAGS)
 			.applyTo(pack);
 
 	}

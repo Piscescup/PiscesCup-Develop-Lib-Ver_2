@@ -52,7 +52,6 @@ public final class ShapedCraftingRecipe extends CraftingRecipe<ShapedCraftingRec
     }
 
     public ShapedCraftingRecipe definition(@NotNull Map<Character, Ingredient> definitions) {
-        NullCheck.requireNonNull(definitions);
         NullCheck.requireAllNonNull(definitions.keySet());
         NullCheck.requireAllNonNull(definitions.values());
         this.ingredientDefinitions.putAll(definitions);

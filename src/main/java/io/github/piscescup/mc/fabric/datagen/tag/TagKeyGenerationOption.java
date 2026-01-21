@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.world.poi.PointOfInterestType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
@@ -64,6 +65,9 @@ public class TagKeyGenerationOption<T> implements DataGenOption {
      */
     public static final TagKeyGenerationOption<EntityType<?>> ENTITY_TYPE_TAGS =
         createFor(RegistryKeys.ENTITY_TYPE);
+
+    public static final TagKeyGenerationOption<PointOfInterestType> POINT_OF_INTEREST_TYPE_TAGS =
+        createFor(RegistryKeys.POINT_OF_INTEREST_TYPE);
 
     private final RegistryKey<? extends Registry<T>> registryKey;
     private final TagKeyRegisterList<T> tagKeyRegisters;
