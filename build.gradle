@@ -84,6 +84,7 @@ publishing {
 	}
 }
 
+// Configure test task to use JUnit Platform
 test {
 	useJUnitPlatform()
 }

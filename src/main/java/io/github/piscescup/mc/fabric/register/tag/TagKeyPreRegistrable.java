@@ -1,6 +1,8 @@
 package io.github.piscescup.mc.fabric.register.tag;
 
 import io.github.piscescup.mc.fabric.register.PreRegistrable;
+import net.minecraft.registry.DefaultedRegistry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;
 import org.jetbrains.annotations.NotNull;
@@ -107,6 +109,13 @@ public interface TagKeyPreRegistrable<T> extends PreRegistrable<TagKeyPostRegist
      */
     default TagKeyPreRegistrable<T> addTags(@NotNull TagKey<T>[] tags) {
         return this.addTags(List.of(tags));
+    }
+
+    TagKeyPreRegistrable<T> addRegistryKey(@NotNull RegistryKey<T> key);
+
+    default TagKeyPreRegistrable<T> addRegistryKeys(@NotNull Collection<RegistryKey<T>> keys) {
+        keys.forEach(this::addRegistryKey);
+        return this;
     }
 
     /**

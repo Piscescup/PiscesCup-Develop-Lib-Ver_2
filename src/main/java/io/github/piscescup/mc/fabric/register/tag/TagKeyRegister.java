@@ -4,17 +4,21 @@ import io.github.piscescup.mc.fabric.datagen.tag.TagKeysContainer;
 import io.github.piscescup.mc.fabric.register.Register;
 import io.github.piscescup.mc.fabric.utils.CheckUtils.NullCheck;
 import io.github.piscescup.mc.fabric.utils.constant.MCLanguageOption;
+import net.minecraft.block.Block;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.PointOfInterestTypeTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.poi.PointOfInterestType;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -42,9 +46,31 @@ import java.util.stream.Stream;
  *   <li>{@link #mappings}: deferred producers evaluated with a {@link RegistryWrapper.WrapperLookup}</li>
  * </ul>
  *
- * <p>Translations are supported via {@link #translate(MCLanguageOption, String)}. A {@code "#"}
- * prefix is automatically applied to the provided translation value to match the conventional
- * tag-style naming used in UI and documentation.
+ * <h2>Usages</h2>
+ * Below is an example for Item Tags:
+ * <pre>{@code
+ * public static final TagKey<Item> ORES = TagKeyRegister.createFor(RegistryKeys.ITEM, MOD_ID, "ores")
+ *     .addTag(ItemTags.COAL_ORES)
+ *     .addTag(ItemTags.COPPER_ORES)
+ *     .addTag(ItemTags.DIAMOND_ORES)
+ *     .addTag(ItemTags.EMERALD_ORES)
+ *     .addTag(ItemTags.GOLD_ORES)
+ *     .addTag(ItemTags.IRON_ORES)
+ *     .addTag(ItemTags.LAPIS_ORES)
+ *     .addTag(ItemTags.REDSTONE_ORES)
+ *     .register()
+ *     .translate(MCLanguageOption.ZH_CN, "矿石")
+ *     .translate(MCLanguageOption.EN_US, "Ores")
+ *     .get();
+ * }</pre>
+ *
+ * Below is an example for POI Tags:
+ * <pre>{@code
+ * public static final TagKey<PointOfInterestType> JOB = TagKeyRegister.VANILLA_ACQUIRABLE_JOB_SITE
+ *     .addRegistryKey(PCDevLibTestPOIs.TEST_VILLAGER_POI)
+ *     .register()
+ *     .get();
+ * }</pre>
  *
  * @param <T> the element type contained by the tag (e.g., {@code Item}, {@code Block})
  *
@@ -55,10 +81,9 @@ public class TagKeyRegister<T>
     extends Register<TagKey<T>, TagKeyPostRegistrable<T>, TagKeyRegister<T>>
     implements TagKeyPreRegistrable<T>, TagKeyPostRegistrable<T>
 {
-    private static final String TAG_PREFIX = "#";
-
     private final List<T> content;
     private final List<TagKey<T>> tags;
+    private final List<RegistryKey<T>> keys;
     private final List<Function<RegistryWrapper.WrapperLookup, Stream<T>>> mappings;
     private final RegistryKey<? extends Registry<T>> registryRef;
 
@@ -70,6 +95,7 @@ public class TagKeyRegister<T>
         this.registryRef = registryRef;
         this.content = new ArrayList<>();
         this.tags = new ArrayList<>();
+        this.keys = new ArrayList<>();
         this.mappings = new ArrayList<>();
     }
 
@@ -79,7 +105,6 @@ public class TagKeyRegister<T>
      * @param registryRef the registry this tag belongs to
      * @param id          the identifier of the tag
      * @param <T>         the element type contained by the tag
-     * @return a new {@link TagKeyPreRegistrable} instance
      */
     @Contract("_, _ -> new")
     public static <T> @NotNull TagKeyPreRegistrable<T> createFor(
@@ -97,7 +122,6 @@ public class TagKeyRegister<T>
      * @param namespace   the identifier namespace
      * @param path        the identifier path
      * @param <T>         the element type contained by the tag
-     * @return a new {@link TagKeyPreRegistrable} instance
      */
     public static <T> @NotNull TagKeyPreRegistrable<T> createFor(
         RegistryKey<? extends Registry<T>> registryRef,
@@ -112,7 +136,6 @@ public class TagKeyRegister<T>
      * Adds a single element to this tag's direct content list.
      *
      * @param item the element to add
-     * @return this instance for fluent chaining
      */
     @Override
     public TagKeyPreRegistrable<T> add(@NotNull T item) {
@@ -125,12 +148,18 @@ public class TagKeyRegister<T>
      * Adds a referenced tag to be included by this tag.
      *
      * @param tag the referenced tag
-     * @return this instance for fluent chaining
      */
     @Override
     public TagKeyPreRegistrable<T> addTag(@NotNull TagKey<T> tag) {
         NullCheck.requireNonNull(tag);
         this.tags.add(tag);
+        return this;
+    }
+
+    @Override
+    public TagKeyPreRegistrable<T> addRegistryKey(@NotNull RegistryKey<T> key) {
+        NullCheck.requireNonNull(key);
+        this.keys.add(key);
         return this;
     }
 
@@ -141,7 +170,6 @@ public class TagKeyRegister<T>
      * {@link RegistryWrapper.WrapperLookup} (typically during data generation).
      *
      * @param mappingFunction a lookup-dependent producer for tag elements
-     * @return this instance for fluent chaining
      */
     @Override
     public TagKeyPreRegistrable<T> add(Function<RegistryWrapper.WrapperLookup, Stream<T>> mappingFunction) {
@@ -157,7 +185,6 @@ public class TagKeyRegister<T>
      * container associated with {@link #registryRef}, where a tag data provider can later read
      * {@link #getContent()}, {@link #getTags()}, and {@link #getMappings()} to produce the final output.
      *
-     * @return this instance as a {@link TagKeyPostRegistrable} for post-registration fluent operations
      */
     @Override
     public TagKeyPostRegistrable<T> register() {
@@ -166,18 +193,21 @@ public class TagKeyRegister<T>
         return this;
     }
 
+
+    private static final BiFunction<Identifier, String, String> TAG_TRANSLATION_FUNC =
+        (id, translation) -> "#" + id.getNamespace() + ":" + translation;
+
     /**
-     * Adds a translation entry for this tag, prefixing the value with {@code "#"}.
+     * Adds a translation entry for this tag, prefixing the value with {@code "#"} and adding the namespace foe the translation.
      *
-     * <p>This is a convenience for common tag-style UI labels (e.g., {@code "#ores"}).
+     * <p>This is a convenience for common tag-style UI labels (e.g., {@code "#pc-dev-lib:ores"}).
      *
      * @param lang  the language option
-     * @param value the translation value without the {@code "#"} prefix
-     * @return this instance for fluent chaining
+     * @param value the translation value.
      */
     @Override
     public TagKeyPostRegistrable<T> translate(@NotNull MCLanguageOption lang, @NotNull String value) {
-        return super.translate(lang, TAG_PREFIX + value);
+        return super.translate(lang,  TAG_TRANSLATION_FUNC.apply(this.id, value));
     }
 
     /**
@@ -206,4 +236,51 @@ public class TagKeyRegister<T>
     public List<Function<RegistryWrapper.WrapperLookup, Stream<T>>> getMappings() {
         return mappings;
     }
+
+    public List<RegistryKey<T>> getKeys() {
+        return keys;
+    }
+
+    /**
+     * Creates a new pre-registrable builder for a vanilla {@link TagKey}.
+     *
+     * @param <T> the element type contained by the tag
+     * @param vanillaTag the vanilla tag to create a pre-registrable builder for
+     * @return a new {@link TagKeyPreRegistrable} instance
+     */
+    @Contract("_ -> new")
+    public static <T> @NotNull TagKeyPreRegistrable<T> createForTagKey(@NotNull TagKey<T> vanillaTag) {
+        return new TagKeyRegister<>(vanillaTag.registryRef(), vanillaTag.id());
+    }
+
+    /**
+     * Represents a pre-registrable tag key for blocks that require an iron tool or better to be mined.
+     * This tag is designed to match the vanilla Minecraft behavior, where certain blocks are only
+     * mineable with at least an iron-tier tool to prevent breaking and to drop their items.
+     * It is used to categorize and manage blocks within the game's data system.
+     */
+    public static final TagKeyPreRegistrable<Block> VANILLA_NEEDS_IRON_TOOL = createForTagKey(BlockTags.NEEDS_IRON_TOOL);
+
+    /**
+     * Represents a pre-registrable tag key for blocks that require a diamond tool to be effectively mined.
+     * This tag is designed to align with the vanilla Minecraft tag, ensuring compatibility and ease of use
+     * within modded environments. Blocks associated with this tag will not drop anything or drop in a less
+     * effective manner when mined with tools other than diamond ones.
+     */
+    public static final TagKeyPreRegistrable<Block> VANILLA_NEEDS_DIAMOND_TOOL = createForTagKey(BlockTags.NEEDS_DIAMOND_TOOL);
+
+    /**
+     * Represents a pre-registrable tag for blocks that require at least a stone tool to be mined effectively.
+     * This tag is designed to align with the vanilla Minecraft behavior, specifically targeting blocks
+     * associated with the {@link BlockTags#NEEDS_STONE_TOOL} tag.
+     */
+    public static final TagKeyPreRegistrable<Block> VANILLA_NEEDS_STONE_TOOL = createForTagKey(BlockTags.NEEDS_STONE_TOOL);
+
+    /**
+     * A pre-registrable builder for a vanilla {@link PointOfInterestType} tag, specifically for the "acquirable job site" tag.
+     * This constant is used to create and manage tags related to point of interest types that can be acquired as job sites in the game.
+     */
+    public static final TagKeyPreRegistrable<PointOfInterestType> VANILLA_ACQUIRABLE_JOB_SITE = createForTagKey(PointOfInterestTypeTags.ACQUIRABLE_JOB_SITE);
+
+
 }

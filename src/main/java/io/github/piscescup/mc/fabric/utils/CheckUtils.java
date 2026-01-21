@@ -83,6 +83,7 @@ public final class CheckUtils {
         }
 
         public static <T> Iterable<T> requireAllNonNull(Iterable<T> iterable, String message) {
+            requireNonNull(iterable, OBJECT_NULL_MESSAGE_FUNC.apply(iterable));
             for (T obj : iterable) {
                 requireNonNull(obj, message);
             }

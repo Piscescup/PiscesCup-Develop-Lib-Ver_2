@@ -1,9 +1,13 @@
 package io.github.piscescup.mc.fabric;
 
-import io.github.piscescup.mc.fabric.test.item.PCDevLibTestItem;
+import io.github.piscescup.mc.fabric.test.item.PCDevLibTestItems;
 import io.github.piscescup.mc.fabric.test.itemgroup.PCDevLibTestItemGroups;
+import io.github.piscescup.mc.fabric.test.poi.PCDevLibTestPOIs;
 import io.github.piscescup.mc.fabric.test.tag.PCDevLibTestItemTags;
+import io.github.piscescup.mc.fabric.test.tag.PCDevLibTestPOITags;
+import io.github.piscescup.mc.fabric.test.villager.PCDevLibTestVillagers;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
 
 import static io.github.piscescup.mc.fabric.References.*;
 
@@ -24,11 +28,17 @@ public class PCDevelopLib implements ModInitializer {
         MOD_LOGGER.info(MOD_FLAG);
         MOD_LOGGER.info(THANKS);
 
-        RegisterLamp.create()
-                .addModule(PCDevLibTestItem::new)
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            RegisterLamp.create()
+                .addModule(PCDevLibTestItems::new)
                 .addModule(PCDevLibTestItemGroups::new)
                 .addModule(PCDevLibTestItemTags::new)
+                .addModule(PCDevLibTestPOITags::new)
+                .addModule(PCDevLibTestPOIs::new)
+                .addModule(PCDevLibTestVillagers::new)
                 .registerAll(MOD_NAME);
+        }
+
 
         MOD_LOGGER.info(MOD_FINISH);
 	}

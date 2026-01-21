@@ -61,6 +61,15 @@ class Register<T, POST extends PostRegistrable<T, POST, R>, R extends Register<T
     }
 
     /**
+     * Returns the identifier associated with this register instance.
+     *
+     * @return The identifier of the registered object
+     */
+    public @NotNull Identifier getId() {
+        return id;
+    }
+
+    /**
      * Returns the registry key associated with the registered object.
      * @return The registry key of the registered object.
      * @see RegistryKey

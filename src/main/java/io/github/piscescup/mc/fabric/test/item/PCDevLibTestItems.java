@@ -18,7 +18,7 @@ import static io.github.piscescup.mc.fabric.References.*;
  * @Date 2025-12-27
  * @since 1.0.0
  */
-public final class PCDevLibTestItem implements Registered {
+public final class PCDevLibTestItems implements Registered {
     public static final List<Item> PC_DEV_LIB_ITEMS = new ArrayList<>();
 
     public static final Item TEST_ITEM1 = ItemRegister.createForItem(MOD_ID, "test_item1")

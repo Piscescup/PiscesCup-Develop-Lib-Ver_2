@@ -44,6 +44,8 @@ public class TagDataGenProvider<T> extends FabricTagProvider<T> {
                 TagKey<T> tag = register.get();
                 List<T> content = register.getContent();
                 List<TagKey<T>> tags = register.getTags();
+                List<RegistryKey<T>> keys = register.getKeys();
+
                 List<Function<RegistryWrapper.WrapperLookup, Stream<T>>> functions = register.getMappings();
 
                 Stream<T> stream = functions.stream()
@@ -53,6 +55,9 @@ public class TagDataGenProvider<T> extends FabricTagProvider<T> {
                 ProvidedTagBuilder<RegistryKey<T>, T> builder = this.builder(tag);
                 tags.forEach(
                     builder::addOptionalTag
+                );
+                keys.forEach(
+                    builder::addOptional
                 );
 
                 Stream.concat(stream, content.stream())
