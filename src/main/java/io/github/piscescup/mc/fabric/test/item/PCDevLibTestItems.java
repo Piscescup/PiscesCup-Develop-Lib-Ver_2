@@ -1,7 +1,9 @@
 package io.github.piscescup.mc.fabric.test.item;
 
 import io.github.piscescup.mc.fabric.Registered;
+import io.github.piscescup.mc.fabric.register.item.BlockItemRegister;
 import io.github.piscescup.mc.fabric.register.item.ItemRegister;
+import io.github.piscescup.mc.fabric.test.block.PCDevLibTestBlocks;
 import io.github.piscescup.mc.fabric.test.item.custom.TestCustomItem;
 import io.github.piscescup.mc.fabric.utils.constant.MCLanguageOption;
 import net.minecraft.item.Item;
@@ -41,6 +43,10 @@ public final class PCDevLibTestItems implements Registered {
         .translate(MCLanguageOption.EN_US, "PCDevLib Custom Item")
         .translate(MCLanguageOption.ZH_CN, "PCDevLib 自定义物品")
         .collectsTo(PC_DEV_LIB_ITEMS)
+        .get();
+
+    public static final Item TEST_BLOCK_ITEM = BlockItemRegister.createFor(PCDevLibTestBlocks.TEST_BLOCK)
+        .register()
         .get();
 
 }

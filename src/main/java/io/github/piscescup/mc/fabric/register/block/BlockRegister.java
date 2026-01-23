@@ -15,10 +15,28 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Function;
 
 /**
- * <h2>Description</h2>
+ * The {@code BlockRegister} class is used to register blocks with specified settings
+ * and a factory for block creation. This class implements both {@link BlockPreRegistrable}
+ * and {@link BlockPostRegistrable} interfaces, allowing for pre-registration setup and
+ * post-registration actions.
+ * <p>
+ * The {@code BlockRegister} supports block creation with customizable {@code AbstractBlock.Settings}
+ * and allows for the definition of custom factories. It typically handles the generation
+ * of associated {@code BlockItem}s automatically if configured.
+ * </p>
  *
  * <h2>Usages</h2>
- *
+ * <pre>{@code
+ * public static final Block TEST_BLOCK = BlockRegister.createForBlock(MOD_ID, "test_block")
+ *         .setting(AbstractBlock.Settings.create()
+ *         .strength(2.0f)
+ *         .requiresTool()
+ *     )
+ *     .register()
+ *     .translate(MCLanguage.EN_US, "PCDevLib Test Block")
+ *     .translate(MCLanguage.ZH_CN, "PCDevLib 测试方块")
+ *     .get();
+ * }</pre>
  * @author REN YuanTong
  * @since 1.0.0
  */
@@ -34,6 +52,13 @@ public class BlockRegister
         super(RegistryKeys.BLOCK, id);
     }
 
+    /**
+     * Creates a new instance of {@link BlockPreRegistrable} for the given namespace and path.
+     *
+     * @param namespace the namespace for the block; must not be null
+     * @param path the path for the block; must not be null
+     * @throws NullPointerException if either {@code namespace} or {@code path} is null
+     */
     @Contract("_, _ -> new")
     public static @NotNull BlockPreRegistrable createFor(
         @NotNull String namespace,
@@ -44,6 +69,12 @@ public class BlockRegister
         return new BlockRegister(Identifier.of(namespace, path));
     }
 
+    /**
+     * Creates a new instance of {@link BlockPreRegistrable} for the given identifier.
+     *
+     * @param id the unique identifier for the block; must not be null
+     * @throws NullPointerException if {@code id} is null
+     */
     @Contract("_ -> new")
     public static @NotNull BlockPreRegistrable createFor(
         @NotNull Identifier id

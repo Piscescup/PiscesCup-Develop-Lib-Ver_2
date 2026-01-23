@@ -76,9 +76,12 @@ public final class RegisterLamp {
      * @param modName the mod identifier or namespace used during registration
      */
     public void registerAll(String modName) {
+        String name = CheckUtils.NullCheck.requireNonNullOrElse(modName, "<Empty Mod Name>");
+
         registeredModules.stream()
             .filter(CheckUtils.NullCheck::nonNull)
             .map(Supplier::get)
-            .forEach(registered -> registered.register(modName));
+            .filter(CheckUtils.NullCheck::nonNull)
+            .forEach(registered -> registered.register(name));
     }
 }
