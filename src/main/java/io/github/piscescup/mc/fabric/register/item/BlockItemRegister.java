@@ -22,11 +22,11 @@ import java.util.function.BiFunction;
  * and an item factory, then performs the actual registration in the {@link #register()} step.
  *
  * <p>Typical usage:
- * <pre>
+ * <pre>{@code
  * BlockItemRegister.createFor(block)
  *     .setting(new Item.Settings()...)
  *     .factory(CustomBlockItem::new) // Optional custom factory
- *     .register();
+ *     .register();}
  * </pre>
  *
  * @author REN YuanTong
