@@ -3,6 +3,8 @@ package io.github.piscescup.mc.fabric.interfaces.entries;
 import java.util.List;
 
 /**
+ * Represents a 4 element entry.
+ *
  * @author REN YuanTong
  * @since 1.0.0
  */

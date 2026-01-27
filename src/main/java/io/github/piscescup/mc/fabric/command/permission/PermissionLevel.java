@@ -30,7 +30,7 @@ public enum PermissionLevel {
      *     <li>The player can use {@code F3+F4} (game mode switcher) and {@code F3+N} debug hotkey (toggle between Spectator and the previous game mode).</li>
      *     <li>The player can change or lock difficulty in Options screen. Note that the player in a singleplayer world or the owner of a LAN world can change or lock difficulty without a permission level of {@code LEVEL_GAMEMASTER}.</li>
      *     <li>With "Operator Items Tab" option turned on, the player can find operator items and an "Operator Utilities" tab in the creative inventory.</li>
-     *     <li>Target selectors can be used in commands like /tell and raw JSON texts.</li>
+     *     <li>Target selectors can be used in commands like {@code /tell} and raw JSON texts.</li>
      * </ul>
      *
      */

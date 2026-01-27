@@ -3,6 +3,9 @@ package io.github.piscescup.mc.fabric.interfaces.entries;
 import java.util.List;
 
 /**
+ * The {@code Entry} interface defines a contract for an entry that can hold multiple elements.
+ * It provides methods to get the number of elements in the entry and to convert the entry into a List.
+ *
  * @author REN YuanTong
  * @since 1.0.0
  */
